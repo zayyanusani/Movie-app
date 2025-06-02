@@ -1,1 +1,79 @@
+// backend/index.js
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
 
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Movie Schema
+const movieSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  year: { type: Number, required: true },
+  director: { type: String, required: true },
+  description: String,
+  poster: String,
+  rating: Number,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+
+// Routes
+app.get('/api/movies', async (req, res) => {
+  try {
+    const movies = await Movie.find().sort({ createdAt: -1 });
+    res.json(movies);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/api/movies', async (req, res) => {
+  const movie = new Movie({
+    title: req.body.title,
+    year: req.body.year,
+    director: req.body.director,
+    description: req.body.description,
+    poster: req.body.poster,
+    rating: req.body.rating
+  });
+
+  try {
+    const newMovie = await movie.save();
+    res.status(201).json(newMovie);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Search endpoint
+app.get('/api/movies/search', async (req, res) => {
+  const query = req.query.q;
+  try {
+    const movies = await Movie.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { director: { $regex: query, $options: 'i' } }
+      ]
+    });
+    res.json(movies);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
