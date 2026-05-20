@@ -1,1 +1,14 @@
-npm-shrinkwrap.json,yarn.lock
+{
+  "name": "movie-app",
+  "version": "1.0.0",
+  "description": "Movie application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": ["movie", "app"],
+  "author": "zayyanusani",
+  "license": "Apache-2.0",
+  "dependencies": {}
+}
