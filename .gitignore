@@ -399,3 +399,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Environment variables - SECURITY: Keep sensitive credentials local
+.env
+.env.local
+.env.*.local
+.env.*.example
