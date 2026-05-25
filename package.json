@@ -4,11 +4,17 @@
   "description": "Movie application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js"
+    "start": "node Server.js",
+    "dev": "node Server.js"
   },
   "keywords": ["movie", "app"],
   "author": "zayyanusani",
   "license": "Apache-2.0",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.9.0",
+    "mongoose": "^7.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  }
 }
